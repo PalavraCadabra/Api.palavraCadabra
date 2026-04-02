@@ -5,7 +5,7 @@ from sqlalchemy import Enum, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
+from app.models.base import Base, SyncMixin, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class CommunicationLevel(str, enum.Enum):
@@ -28,7 +28,7 @@ class VisualCapability(str, enum.Enum):
     high_contrast_needed = "high_contrast_needed"
 
 
-class AACProfile(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+class AACProfile(UUIDPrimaryKeyMixin, TimestampMixin, SyncMixin, Base):
     __tablename__ = "aac_profiles"
 
     user_id: Mapped[uuid.UUID] = mapped_column(

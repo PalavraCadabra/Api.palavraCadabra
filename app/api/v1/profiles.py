@@ -93,3 +93,4 @@ async def delete_profile(
     if not profile:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
     await session.delete(profile)
+    await session.commit()

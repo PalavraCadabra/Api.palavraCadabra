@@ -1,19 +1,15 @@
-FROM python:3.12-slim AS base
+FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install uv for fast dependency resolution
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# Copy dependency files first for layer caching
-COPY pyproject.toml ./
-
-RUN uv pip install --system --no-cache -r pyproject.toml
-
 COPY . .
+
+RUN uv pip install --system --no-cache .
 
 EXPOSE 8000
 

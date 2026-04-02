@@ -101,6 +101,7 @@ async def delete_board(
     if not board:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Board not found")
     await session.delete(board)
+    await session.commit()
 
 
 # --- Cell endpoints ---
@@ -161,3 +162,4 @@ async def delete_cell(
     if not cell:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cell not found")
     await session.delete(cell)
+    await session.commit()

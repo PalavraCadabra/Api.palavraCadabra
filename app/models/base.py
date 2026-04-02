@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, func
+from sqlalchemy import Boolean, DateTime, Integer, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -23,6 +23,18 @@ class TimestampMixin:
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
+    )
+
+
+class SyncMixin:
+    """Mixin for entities that participate in offline sync."""
+
+    version: Mapped[int] = mapped_column(
+        Integer, default=1, nullable=False, server_default="1"
+    )
+    device_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    is_deleted: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False, server_default="false"
     )
 
 

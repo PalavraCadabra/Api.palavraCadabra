@@ -24,7 +24,7 @@ class UsageLog(UUIDPrimaryKeyMixin, Base):
     )
     event_type: Mapped[str] = mapped_column(String(50), nullable=False)
     event_data: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
-    session_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    session_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
 
     # Relationships
     profile: Mapped["AACProfile"] = relationship(  # noqa: F821

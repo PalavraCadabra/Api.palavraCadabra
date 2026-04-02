@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.models.board import BoardType
 from app.models.board_cell import CellAction
@@ -11,22 +11,24 @@ from app.models.board_cell import CellAction
 
 
 class BoardCellCreate(BaseModel):
-    position_row: int
-    position_col: int
+    position_row: int = Field(ge=0, le=19)
+    position_col: int = Field(ge=0, le=19)
     symbol_id: uuid.UUID | None = None
-    label_override: str | None = None
+    label_override: str | None = Field(default=None, max_length=255)
     action: CellAction = CellAction.speak
-    action_target: str | None = None
-    background_color: str = "#FFFFFF"
+    action_target: str | None = Field(default=None, max_length=512)
+    background_color: str = Field(default="#FFFFFF", max_length=9, pattern=r"^#[0-9A-Fa-f]{6,8}$")
     is_hidden: bool = False
 
 
 class BoardCellUpdate(BaseModel):
     symbol_id: uuid.UUID | None = None
-    label_override: str | None = None
+    label_override: str | None = Field(default=None, max_length=255)
     action: CellAction | None = None
-    action_target: str | None = None
-    background_color: str | None = None
+    action_target: str | None = Field(default=None, max_length=512)
+    background_color: str | None = Field(
+        default=None, max_length=9, pattern=r"^#[0-9A-Fa-f]{6,8}$"
+    )
     is_hidden: bool | None = None
 
 
@@ -50,20 +52,20 @@ class BoardCellRead(BaseModel):
 
 class BoardCreate(BaseModel):
     profile_id: uuid.UUID | None = None
-    name: str
+    name: str = Field(min_length=1, max_length=255)
     board_type: BoardType = BoardType.core
-    grid_rows: int = 4
-    grid_cols: int = 5
+    grid_rows: int = Field(default=4, ge=1, le=20)
+    grid_cols: int = Field(default=5, ge=1, le=20)
     is_template: bool = False
     parent_board_id: uuid.UUID | None = None
-    cells: list[BoardCellCreate] = []
+    cells: list[BoardCellCreate] = Field(default=[], max_length=400)
 
 
 class BoardUpdate(BaseModel):
-    name: str | None = None
+    name: str | None = Field(default=None, min_length=1, max_length=255)
     board_type: BoardType | None = None
-    grid_rows: int | None = None
-    grid_cols: int | None = None
+    grid_rows: int | None = Field(default=None, ge=1, le=20)
+    grid_cols: int | None = Field(default=None, ge=1, le=20)
     is_template: bool | None = None
 
 

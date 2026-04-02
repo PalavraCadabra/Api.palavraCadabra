@@ -5,7 +5,7 @@ from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.models.base import Base, UUIDPrimaryKeyMixin
+from app.models.base import Base, SyncMixin, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class CellAction(str, enum.Enum):
@@ -14,7 +14,7 @@ class CellAction(str, enum.Enum):
     modifier = "modifier"
 
 
-class BoardCell(UUIDPrimaryKeyMixin, Base):
+class BoardCell(UUIDPrimaryKeyMixin, TimestampMixin, SyncMixin, Base):
     __tablename__ = "board_cells"
 
     board_id: Mapped[uuid.UUID] = mapped_column(

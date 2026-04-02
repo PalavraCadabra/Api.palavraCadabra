@@ -7,6 +7,7 @@ from app.models.symbol import Symbol
 from app.models.usage_log import UsageLog
 from app.models.care_relationship import CareRelationship
 from app.models.literacy_milestone import LiteracyMilestone
+from app.models.consent import UserConsent
 
 __all__ = [
     "Base",
@@ -18,4 +19,5 @@ __all__ = [
     "UsageLog",
     "CareRelationship",
     "LiteracyMilestone",
+    "UserConsent",
 ]

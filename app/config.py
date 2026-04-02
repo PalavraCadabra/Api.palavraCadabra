@@ -23,9 +23,21 @@ class Settings(BaseSettings):
     COGNITO_USER_POOL_ID: str = ""
     COGNITO_CLIENT_ID: str = ""
 
+    # Anthropic / Claude
+    ANTHROPIC_API_KEY: str = ""
+
     # App
-    APP_NAME: str = "palavraCadabra API"
+    APP_NAME: str = "Palavra Cadabra API"
     DEBUG: bool = False
+
+    # CORS
+    ALLOWED_ORIGINS: list[str] = [
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "http://localhost:63469",
+    ]
+    # In dev, allow any localhost port for Flutter web dev server
+    CORS_ALLOW_ALL_LOCALHOST: bool = True
 
 
 settings = Settings()

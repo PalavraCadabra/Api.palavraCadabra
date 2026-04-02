@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DBSession
+from app.core.rate_limit import limiter
 from app.models.user import User
 from app.schemas.user import Token, UserCreate, UserRead
 from app.services.auth import AuthService
@@ -12,7 +13,8 @@ auth_service = AuthService()
 
 
 @router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-async def register(data: UserCreate, session: DBSession) -> User:
+@limiter.limit("5/minute")
+async def register(request: Request, data: UserCreate, session: DBSession) -> User:
     # Check if email already exists
     result = await session.execute(select(User).where(User.email == data.email))
     if result.scalar_one_or_none():
@@ -34,7 +36,9 @@ async def register(data: UserCreate, session: DBSession) -> User:
 
 
 @router.post("/login", response_model=Token)
+@limiter.limit("5/minute")
 async def login(
+    request: Request,
     session: DBSession,
     form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> dict[str, str]:

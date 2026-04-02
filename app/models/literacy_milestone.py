@@ -32,8 +32,8 @@ class LiteracyMilestone(UUIDPrimaryKeyMixin, Base):
         server_default=func.now(),
         nullable=False,
     )
-    recorded_by: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=False
+    recorded_by: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 

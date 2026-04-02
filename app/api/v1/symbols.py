@@ -1,7 +1,9 @@
 import uuid
 
 from fastapi import APIRouter, HTTPException, status
-from sqlalchemy import or_, select
+from sqlalchemy import cast, or_, select
+from sqlalchemy.dialects.postgresql import ARRAY, array
+from sqlalchemy import String
 
 from app.api.deps import CurrentUser, DBSession
 from app.models.symbol import Symbol
@@ -26,7 +28,7 @@ async def list_symbols(
         query = query.where(
             or_(
                 Symbol.label_pt.ilike(f"%{search}%"),
-                Symbol.keywords.any(search),
+                Symbol.keywords.contains(cast(array([search]), ARRAY(String))),
             )
         )
     query = query.order_by(Symbol.frequency_rank.asc().nullslast()).offset(skip).limit(limit)

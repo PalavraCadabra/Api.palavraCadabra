@@ -5,7 +5,7 @@ from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
+from app.models.base import Base, SyncMixin, TimestampMixin, UUIDPrimaryKeyMixin
 
 
 class BoardType(str, enum.Enum):
@@ -15,7 +15,7 @@ class BoardType(str, enum.Enum):
     activity = "activity"
 
 
-class Board(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+class Board(UUIDPrimaryKeyMixin, TimestampMixin, SyncMixin, Base):
     __tablename__ = "boards"
 
     profile_id: Mapped[uuid.UUID | None] = mapped_column(
