@@ -5,9 +5,11 @@ from app.api.v1 import (
     auth,
     backup,
     boards,
+    care_relationships,
     literacy,
     privacy,
     profiles,
+    research,
     symbols,
     sync,
     usage_logs,
@@ -27,3 +29,5 @@ api_v1_router.include_router(backup.router, prefix="/backup", tags=["backup"])
 api_v1_router.include_router(ai.router, prefix="/ai", tags=["ai"])
 api_v1_router.include_router(privacy.router, prefix="/privacy", tags=["privacy"])
 api_v1_router.include_router(literacy.router, prefix="/literacy", tags=["literacy"])
+api_v1_router.include_router(care_relationships.router, prefix="/care", tags=["care"])
+api_v1_router.include_router(research.router, prefix="/research", tags=["research"])
