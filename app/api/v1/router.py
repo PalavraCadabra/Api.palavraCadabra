@@ -5,6 +5,7 @@ from app.api.v1 import (
     auth,
     backup,
     boards,
+    literacy,
     privacy,
     profiles,
     symbols,
@@ -25,3 +26,4 @@ api_v1_router.include_router(sync.router, prefix="/sync", tags=["sync"])
 api_v1_router.include_router(backup.router, prefix="/backup", tags=["backup"])
 api_v1_router.include_router(ai.router, prefix="/ai", tags=["ai"])
 api_v1_router.include_router(privacy.router, prefix="/privacy", tags=["privacy"])
+api_v1_router.include_router(literacy.router, prefix="/literacy", tags=["literacy"])

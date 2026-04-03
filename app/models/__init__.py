@@ -8,6 +8,9 @@ from app.models.usage_log import UsageLog
 from app.models.care_relationship import CareRelationship
 from app.models.literacy_milestone import LiteracyMilestone
 from app.models.consent import UserConsent
+from app.models.literacy_program import LiteracyProgram
+from app.models.literacy_activity import LiteracyActivity
+from app.models.activity_result import ActivityResult
 
 __all__ = [
     "Base",
@@ -20,4 +23,7 @@ __all__ = [
     "CareRelationship",
     "LiteracyMilestone",
     "UserConsent",
+    "LiteracyProgram",
+    "LiteracyActivity",
+    "ActivityResult",
 ]
