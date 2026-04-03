@@ -36,6 +36,20 @@ async def list_symbols(
     return list(result.scalars().all())
 
 
+@router.post("/batch", response_model=list[SymbolRead])
+async def get_symbols_batch(
+    ids: list[uuid.UUID],
+    session: DBSession,
+    current_user: CurrentUser,
+) -> list[Symbol]:
+    """Fetch multiple symbols by their IDs in a single request."""
+    if not ids:
+        return []
+    query = select(Symbol).where(Symbol.id.in_(ids))
+    result = await session.execute(query)
+    return list(result.scalars().all())
+
+
 @router.get("/{symbol_id}", response_model=SymbolRead)
 async def get_symbol(
     symbol_id: uuid.UUID,
