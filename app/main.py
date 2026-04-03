@@ -126,3 +126,19 @@ app.include_router(api_v1_router, prefix="/api/v1")
 @app.get("/health", tags=["health"])
 async def health_check() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.post("/setup-db", tags=["admin"])
+async def setup_database() -> dict[str, str]:
+    """Create all database tables. Safe to call multiple times."""
+    from app.database import engine
+    from app.models.base import Base
+    # Import all models to register them with Base
+    from app.models import (  # noqa: F401
+        user, aac_profile, board, board_cell, symbol,
+        usage_log, care_relationship, literacy_milestone,
+        consent, literacy_program, literacy_activity, activity_result,
+    )
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    return {"status": "tables created"}
