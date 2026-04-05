@@ -162,6 +162,28 @@ async def get_activity(
     return activity
 
 
+@router.delete("/activities/{activity_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_activity(
+    activity_id: uuid.UUID,
+    session: DBSession,
+    current_user: CurrentUser,
+) -> None:
+    """Delete a literacy activity (admin/therapist only)."""
+    if current_user.role.value not in ("admin", "therapist"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only admins and therapists can delete activities",
+        )
+    result = await session.execute(
+        select(LiteracyActivity).where(LiteracyActivity.id == activity_id)
+    )
+    activity = result.scalar_one_or_none()
+    if not activity:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Activity not found")
+    await session.delete(activity)
+    await session.commit()
+
+
 # ──────────────────────────── Results ────────────────────────────
 
 
